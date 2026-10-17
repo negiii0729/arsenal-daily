@@ -54,6 +54,21 @@ def _write(path, content):
             f.write(content)
 
 
+def _link_title(title):
+    return title.replace("\\", "\\\\").replace("[", "\\[").replace("]", "\\]")
+
+
+def _card_block(items, href_prefix):
+    """Markdown list wrapped for the homepage/archive card styles in extra.css."""
+    lines = ['<div class="report-grid" markdown="1">', ""]
+    for date, name, title in items:
+        lines.append(
+            f'- <span class="report-date">{date}</span> [{_link_title(title)}]({href_prefix}{name})'
+        )
+    lines.extend(["", "</div>"])
+    return lines
+
+
 def on_config(config):
     docs = config["docs_dir"]
     folder = os.path.join(docs, FOLDER)
@@ -67,11 +82,11 @@ def on_config(config):
         reports.append((date, name, title))
     reports.sort(key=lambda row: (row[0], row[1]), reverse=True)
 
-    lines = [f"# {LABEL}\n"]
+    lines = [f"# {LABEL}", "", "按日期排列，最新在前。", ""]
     if reports:
-        lines += [f"- **{date}** · [{title}]({name})" for date, name, title in reports]
+        lines += _card_block(reports, "")
     else:
-        lines.append('!!! note "暂无报告"\n    还没有日报，请稍后再来。')
+        lines.append('!!! note "暂无报告"\n\n    还没有日报，请稍后再来。')
     _write(os.path.join(folder, "index.md"), "\n".join(lines) + "\n")
 
     config["nav"] = [
@@ -81,14 +96,23 @@ def on_config(config):
 
     top = reports[:LATEST_N]
     home = [
-        "# 阿森纳日报\n",
-        "阿森纳足球俱乐部中文每日简报。新报告放进 `docs/Daily/` 即可，导航与本页在构建时自动更新（最新在前）。\n",
-        "## 最新日报\n",
+        '<div class="hero" markdown="1">',
+        "",
+        '<p class="kicker">阿森纳 · 中文日报</p>',
+        "",
+        "# 阿森纳日报",
+        "",
+        "赛程、伤病与官方消息的中文每日简报。转会与媒体侧写会标明是否官方。",
+        "",
+        "</div>",
+        "",
+        "## 最新日报",
+        "",
     ]
     if top:
-        home += [f"- **{date}** · [{title}]({FOLDER}/{name})" for date, name, title in top]
+        home += _card_block(top, f"{FOLDER}/")
     else:
         home.append("暂无日报。")
-    home += ["\n## 归档\n", f"- [{LABEL}]({FOLDER}/index.md)"]
+    home += ["", f"全部日报见 [归档]({FOLDER}/index.md)。"]
     _write(os.path.join(docs, "index.md"), "\n".join(home) + "\n")
     return config
