@@ -7,14 +7,30 @@ copyright: 内容整理自公开来源，非阿森纳官方站点
 theme:
   name: material
   language: zh
+  font:
+    text: Noto Sans SC
+    code: Roboto Mono
   palette:
-    scheme: default
-    primary: red
-    accent: amber
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: 切换到深色
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: 切换到浅色
   features:
     - navigation.tabs
     - navigation.indexes
     - navigation.top
+    - navigation.tracking
+    - toc.follow
     - search.suggest
     - search.highlight
 plugins:
@@ -28,6 +44,8 @@ extra_css:
   - stylesheets/extra.css
 markdown_extensions:
   - tables
+  - attr_list
+  - md_in_html
   - toc:
       permalink: true
   - admonition
