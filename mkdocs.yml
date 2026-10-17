@@ -1,0 +1,37 @@
+site_name: 阿森纳日报
+site_url: https://negiii0729.github.io/arsenal-daily/
+site_description: 阿森纳足球俱乐部中文每日简报
+repo_url: https://github.com/negiii0729/arsenal-daily
+repo_name: negiii0729/arsenal-daily
+copyright: 内容整理自公开来源，非阿森纳官方站点
+theme:
+  name: material
+  language: zh
+  palette:
+    scheme: default
+    primary: red
+    accent: amber
+  features:
+    - navigation.tabs
+    - navigation.indexes
+    - navigation.top
+    - search.suggest
+    - search.highlight
+plugins:
+  - search:
+      lang: zh
+hooks:
+  - hooks/autonav.py
+extra:
+  generator: false
+extra_css:
+  - stylesheets/extra.css
+markdown_extensions:
+  - tables
+  - toc:
+      permalink: true
+  - admonition
+  - pymdownx.superfences
+  - pymdownx.magiclink:
+      hide_protocol: false
+      repo_url_shortener: false
