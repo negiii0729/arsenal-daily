@@ -9,27 +9,44 @@ import os
 import re
 
 import yaml
+from mkdocs.plugins import get_plugin_logger
+
+log = get_plugin_logger(__name__)
 
 FOLDER = "Daily"
 LABEL = "日报"
 LATEST_N = 30
+_FILENAME_DATE = re.compile(r"\d{4}-\d{2}-\d{2}")
 
 
-def _meta(path):
+def _rel(path, root):
+    """仓库内相对路径，警告里用它指向文件。"""
+    return os.path.relpath(os.path.abspath(path), root).replace("\\", "/")
+
+
+def _meta(path, root):
+    rel = _rel(path, root)
     with open(path, encoding="utf-8") as f:
         text = f.read()
     meta = {}
     match = re.match(r"^---\s*\n(.*?)\n---\s*\n", text, re.S)
     if match:
         try:
-            meta = yaml.safe_load(match.group(1)) or {}
+            loaded = yaml.safe_load(match.group(1))
         except Exception:
-            meta = {}
+            log.warning("%s: frontmatter YAML 解析失败，视为缺少 title 和 date", rel)
+        else:
+            if isinstance(loaded, dict):
+                meta = loaded
+            else:
+                log.warning("%s: frontmatter 不是键值映射，视为缺少 title 和 date", rel)
         body = text[match.end() :]
     else:
+        log.warning("%s: 缺少 frontmatter，视为缺少 title 和 date", rel)
         body = text
     title = meta.get("title")
     if not title:
+        log.warning("%s: 缺少 title", rel)
         heading = re.search(r"^#\s+(.+)$", body, re.M)
         title = heading.group(1).strip() if heading else os.path.splitext(os.path.basename(path))[0]
     date = meta.get("date")
@@ -37,13 +54,15 @@ def _meta(path):
         date = date.strftime("%Y-%m-%d %H:%M")
     elif isinstance(date, datetime.date):
         date = date.isoformat()
-    if not date:
-        found = re.search(r"\d{4}-\d{2}-\d{2}", os.path.basename(path))
-        date = (
-            found.group(0)
-            if found
-            else datetime.datetime.fromtimestamp(os.path.getmtime(path)).strftime("%Y-%m-%d")
-        )
+    elif isinstance(date, str) and _FILENAME_DATE.fullmatch(date):
+        pass
+    else:
+        if date is None or date == "":
+            log.warning("%s: 缺少 date", rel)
+        else:
+            log.warning("%s: date 格式不正确", rel)
+        found = _FILENAME_DATE.search(os.path.basename(path))
+        date = found.group(0) if found else "0000-00-00"
     return str(title), str(date)
 
 
@@ -71,6 +90,7 @@ def _card_block(items, href_prefix):
 
 def on_config(config):
     docs = config["docs_dir"]
+    root = os.path.dirname(os.path.abspath(config.config_file_path))
     folder = os.path.join(docs, FOLDER)
     os.makedirs(folder, exist_ok=True)
 
@@ -78,7 +98,7 @@ def on_config(config):
     for name in os.listdir(folder):
         if not name.endswith(".md") or name == "index.md":
             continue
-        title, date = _meta(os.path.join(folder, name))
+        title, date = _meta(os.path.join(folder, name), root)
         reports.append((date, name, title))
     reports.sort(key=lambda row: (row[0], row[1]), reverse=True)
 
