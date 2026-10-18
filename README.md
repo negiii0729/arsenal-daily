@@ -43,7 +43,7 @@ mkdocs serve
 
    `date` 写成 YAML 日期或 `YYYY-MM-DD` 字符串都可以。缺 `title` 或 `date` 时，**Check MkDocs build** 的 job **mkdocs build --strict** 失败。
 3. 推送分支，用 `gh pr create --base main` 开 PR。标题用 `Add YYYY-MM-DD 阿森纳日报`。
-4. 等 **Check MkDocs build** / job **mkdocs build --strict** 通过。通过后由 negi 手动 squash merge。不开自动合并。
+4. 开 PR 时用 `gh pr merge --auto --squash` 开启自动合并。**Check MkDocs build**（job **mkdocs build --strict**）通过后自动合并上线；检查失败则不上线，并通知 negi / 架构师。
 
 ```bash
 git fetch origin main
@@ -53,6 +53,7 @@ git add docs/Daily/2026-10-19-阿森纳日报.md
 git commit -m "Add 2026-10-19 阿森纳日报"
 git push -u origin HEAD
 gh pr create --base main --title "Add 2026-10-19 阿森纳日报" --body "本期日报。"
+gh pr merge --auto --squash
 ```
 
 合并进 `main` 后，Actions 工作流 “Deploy MkDocs to Pages” 会构建并部署。仓库需在 Settings → Pages 中把 Source 设为 **GitHub Actions**（首次启用 Pages 时选一次即可）。
