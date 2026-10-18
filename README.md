@@ -43,7 +43,7 @@ mkdocs serve
 
    `date` 写成 YAML 日期或 `YYYY-MM-DD` 字符串都可以。缺 `title` 或 `date` 时，**Check MkDocs build** 的 job **mkdocs build --strict** 失败。
 3. 推送分支，用 `gh pr create --base main` 开 PR。标题用 `Add YYYY-MM-DD 阿森纳日报`。
-4. 开 PR 时用 `gh pr merge --auto --squash` 开启自动合并。**Check MkDocs build**（job **mkdocs build --strict**）通过后自动合并上线；检查失败则不上线，并通知 negi / 架构师。
+4. 开 PR 时用 `gh pr merge --auto --squash` 开启自动合并。**Check MkDocs build**（job **mkdocs build --strict**）通过后自动合并上线。检查失败则 PR 不会合并、网站不更新；日报产出方要自己查看 PR 状态（可用 `gh pr checks` / `gh pr view`），失败时修复或告诉架构师。
 
 ```bash
 git fetch origin main
