@@ -2,3 +2,6 @@ site/
 __pycache__/
 *.pyc
 .venv/
+
+docs/index.md
+docs/Daily/index.md
