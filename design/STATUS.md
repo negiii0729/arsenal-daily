@@ -158,7 +158,7 @@ README.md
 
 原稿附录（未复核，不作为仓库事实）：起草时 `codex exec -m gpt-6-astra`（codex-cli 0.163.0，登录状态为 ChatGPT）失败，`https://chatgpt.com/backend-api/codex/models` 返回 403，随后 `workspace routing discovery failed`。
 
-## 9. 设计 002：日报改周报（进行中）
+## 9. 设计 002：日报改周报（已上线）
 
 设计文档：`design/002-weekly.md`（编号 `002`）。
 
@@ -167,13 +167,11 @@ README.md
 ### AW-01：周报自动导航、校验与站点文案
 
 - 状态：**PR [#14](https://github.com/negiii0729/arsenal-daily/pull/14)（`aw-01-weekly-nav`）已 squash 合入 main（6a66dbf）。**
-- 本地验证（`mkdocs build --strict`）：第 1–3、5、6、8 项按预期通过（无周报兜底文案、首期与第 2 期排序和导航、两种日期写法、省略 `summary`、旧日报未改动、清理临时周报后重建成功）；第 4 项及第 5 项中的非法 `summary` 均按预期构建失败，日志定位文件与原因，无未捕获异常。第 7 项不适用：仓库中没有兜底首期，未执行迁移。CI 结果以 PR 检查为准。
-- 已合入 `main`（6a66dbf）；线上部署以 Pages 工作流结果为准。
+- 本地验证（`mkdocs build --strict`）：第 1–3、5、6、8 项按预期通过（无周报兜底文案、首期与第 2 期排序和导航、两种日期写法、省略 `summary`、旧日报未改动、清理临时周报后重建成功）；第 4 项及第 5 项中的非法 `summary` 均按预期构建失败，日志定位文件与原因，无未捕获异常。第 7 项不适用：仓库中没有兜底首期，未执行迁移。CI（Check MkDocs build）通过。
 
 ### AW-02：周报投稿规范与状态更新
 
-- 状态：**本 PR（`aw-02-weekly-docs`）open，未合并。**
+- 状态：**PR [#15](https://github.com/negiii0729/arsenal-daily/pull/15)（`aw-02-weekly-docs`）已 squash 合入 main（e642259）。**
 - 内容：按 002 更新 `README.md` 的周报发布节奏、文件名、全部 frontmatter 规则与完整示例、`weekly/YYYY-MM-DD` 分支、`Add 第N期 阿森纳周报 YYYY-MM-DD` PR 标题、自动 squash 合并、旧日报存档、生成索引不可手改及首期兜底迁移规则；同步更新本节。
-- 未合入 `main` 前不能记为完成。
 
-截至本节更新时，本地 `main` 仍为 `bdee960`；设计 002 的全部改动都不在 `main` 上，线上站点未因 002 改变。
+**上线状态：** AW-01、AW-02 均已合入 `main`（#14 `6a66dbf`、#15 `e642259`）；线上 Deploy run `39378718020` 已上线，QA L3 PASS。
