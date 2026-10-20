@@ -4,4 +4,5 @@ __pycache__/
 .venv/
 
 docs/index.md
+docs/Weekly/index.md
 docs/Daily/index.md
