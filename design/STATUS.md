@@ -166,7 +166,7 @@ README.md
 
 ### AW-01：周报自动导航、校验与站点文案
 
-- 状态：**PR [#14](https://github.com/negiii0729/arsenal-daily/pull/14)（`aw-01-weekly-nav`）open，未合并。**
+- 状态：**PR [#14](https://github.com/negiii0729/arsenal-daily/pull/14)（`aw-01-weekly-nav`）已 squash 合入 main（6a66dbf）。**
 - 本地验证（`mkdocs build --strict`）：第 1–3、5、6、8 项按预期通过（无周报兜底文案、首期与第 2 期排序和导航、两种日期写法、省略 `summary`、旧日报未改动、清理临时周报后重建成功）；第 4 项及第 5 项中的非法 `summary` 均按预期构建失败，日志定位文件与原因，无未捕获异常。第 7 项不适用：仓库中没有兜底首期，未执行迁移。CI 结果以 PR 检查为准。
 - 尚未合入 `main`，因此不能记为完成；合并和线上部署都还没有发生。
 
