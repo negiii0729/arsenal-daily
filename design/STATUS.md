@@ -4,6 +4,8 @@
 > 复核日期：2026-10-18。依据：仓库文件、`git log`、GitHub Actions 日志、Pages API、线上页面。
 > 原稿是技术负责人的盘点。本文保留其结构，并改正与仓库不符的地方。差异集中在文末。
 
+> 2026-10-20 追加：设计 `002-weekly.md` 已加入本目录，尚未合入 `main`。002 的决定和任务状态见第 9 节；第 1–8 节仍是对 `main` @ `021951d` 的复核记录，未按 002 重写。
+
 ## 1. 项目目标
 
 阿森纳足球俱乐部中文每日简报站点（「阿森纳日报」）：赛程、伤病、官方消息；转会与媒体侧写标明是否官方。非官方站点。
@@ -155,3 +157,23 @@ README.md
 | 文末 Codex 调用记录（`codex exec` 403、workspace routing） | 本次复核没有重跑 Codex。那段记录只作为原稿附录，不作为仓库事实 |
 
 原稿附录（未复核，不作为仓库事实）：起草时 `codex exec -m gpt-6-astra`（codex-cli 0.163.0，登录状态为 ChatGPT）失败，`https://chatgpt.com/backend-api/codex/models` 返回 403，随后 `workspace routing discovery failed`。
+
+## 9. 设计 002：日报改周报（进行中）
+
+设计文档：`design/002-weekly.md`（编号 `002`）。
+
+**改版决定：** 站点从每日简报改为每周简报。每周一 **08:00（Asia/Shanghai）** 发布一期，覆盖发布日前一周的周一至周日；首期为 **2026-10-26，第 1 期**，覆盖 **2026-10-19～2026-10-25**。新周报使用 `docs/Weekly/YYYY-MM-DD-阿森纳周报.md`；已有 4 篇日报原地保留为停更存档，不移动、不改 URL；三个 `index.md` 由 `hooks/autonav.py` 生成，不手改。仓库名、Pages 地址、CI 名称 **Check MkDocs build**（`mkdocs build --strict`）和现有自动 squash 合并机制保持不变。
+
+### AW-01：周报自动导航、校验与站点文案
+
+- 状态：**PR [#14](https://github.com/negiii0729/arsenal-daily/pull/14)（`aw-01-weekly-nav`）open，未合并。**
+- 本地验证（`mkdocs build --strict`）：第 1–3、5、6、8 项按预期通过（无周报兜底文案、首期与第 2 期排序和导航、两种日期写法、省略 `summary`、旧日报未改动、清理临时周报后重建成功）；第 4 项及第 5 项中的非法 `summary` 均按预期构建失败，日志定位文件与原因，无未捕获异常。第 7 项不适用：仓库中没有兜底首期，未执行迁移。CI 结果以 PR 检查为准。
+- 尚未合入 `main`，因此不能记为完成；合并和线上部署都还没有发生。
+
+### AW-02：周报投稿规范与状态更新
+
+- 状态：**本 PR（`aw-02-weekly-docs`）open，未合并。**
+- 内容：按 002 更新 `README.md` 的周报发布节奏、文件名、全部 frontmatter 规则与完整示例、`weekly/YYYY-MM-DD` 分支、`Add 第N期 阿森纳周报 YYYY-MM-DD` PR 标题、自动 squash 合并、旧日报存档、生成索引不可手改及首期兜底迁移规则；同步更新本节。
+- 未合入 `main` 前不能记为完成。
+
+截至本节更新时，本地 `main` 仍为 `bdee960`；设计 002 的全部改动都不在 `main` 上，线上站点未因 002 改变。
